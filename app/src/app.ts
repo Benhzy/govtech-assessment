@@ -1,6 +1,5 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { config } from './config/config';
 
@@ -10,10 +9,13 @@ import profileRoutes from './routes/profile';
 
 const app = express();
 
-// Middleware
+// For deployment
+import cors from 'cors';
+app.use(cors());
+
+// Parse cookie
 app.use(bodyParser.json());
 app.use(cookieParser()); 
-app.use(cors());
 
 // Routes
 app.use('/api/auth', authRoutes);
