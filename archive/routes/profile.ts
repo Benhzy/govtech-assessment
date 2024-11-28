@@ -16,15 +16,16 @@ router.get(
   '/',
   authenticateToken,
   async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-
+    // Validate user
     if (!req.user || !req.user.govEmail) {
-      res.status(403).json({ error: 'Unauthorized access. Missing user details.' });
+      res.status(403).json({ error: 'Unauthorized access. User information missing.' });
       return;
     }
 
     const { govEmail } = req.user;
 
     try {
+      // Retrieve user by govEmail
       const user = await prisma.user.findUnique({
         where: {
           govEmail,

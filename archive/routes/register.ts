@@ -30,7 +30,10 @@ router.get('/data', authenticateToken, (req: AuthenticatedRequest, res: Response
   });
 });
 
-router.post('/', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+router.post(
+  '/',
+  authenticateToken,
+  async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     const { contactEmail, agency, jobDescription, termsAccepted } = req.body;
 
     if (!termsAccepted) {
