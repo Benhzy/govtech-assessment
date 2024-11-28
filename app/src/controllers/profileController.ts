@@ -10,10 +10,7 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
-export const getUserProfile = async (
-  req: AuthenticatedRequest,
-  res: Response
-): Promise<void> => {
+export const getUserProfile = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   if (!req.user || !req.user.govEmail) {
     res.status(403).json({ error: 'Unauthorized access. Missing user details.' });
     return;
