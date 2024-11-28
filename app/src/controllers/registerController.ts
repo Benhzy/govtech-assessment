@@ -43,9 +43,9 @@ export const registerUser = async (req: AuthenticatedRequest, res: Response): Pr
 
   const { name, govEmail } = req.user;
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.gov\.sg$/;                                  // ensure contact email is a government email.
+  const emailRegex = /^[^\s@]+@[^\s@]*gov\.sg$/;                               // ensure contact email is a government email.
   if (!emailRegex.test(contactEmail)) {
-    res.status(400).json({ error: 'Contact email must end with gov.sg.' });
+    res.status(400).json({ error: 'Contact email must be a government email address.' });
     return;
   }
 
