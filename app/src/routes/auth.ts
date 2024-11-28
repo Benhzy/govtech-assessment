@@ -1,10 +1,20 @@
 import { Router, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
+import { config } from '../config/config'
 
 const router = Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
-const GOVAA_AUTH_URL = 'https://localhost/auth';
+
+if (!config.govaaApiUrl) {
+    throw new Error("GOVAA Url not found.");
+}
+const GOVAA_AUTH_URL: string = `${config.govaaApiUrl}/auth`;
+
+if (!config.jwtSecret) {
+    throw new Error("JWT secret not found.");
+}
+const JWT_SECRET: string = config.jwtSecret;
+
 
 router.post('/govaa-authenticate', async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;

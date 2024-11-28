@@ -1,14 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
+import { config } from './config/config'
 
 import authRoutes from './routes/auth';
 import registerRoutes from './routes/register';
 import profileRoutes from './routes/profile';
-import agenciesRoutes from './routes/agencies';
-
-dotenv.config();
 
 const app = express();
 
@@ -18,9 +15,12 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/register', registerRoutes);
 app.use('/api/profile', profileRoutes);
-app.use('/api/agencies', agenciesRoutes);
 
-const PORT = process.env.PORT || 3000;
+if (!config.port) {
+  throw new Error("Port not found.");
+}
+const PORT: string = `${config.port}`;
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

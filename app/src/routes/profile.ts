@@ -5,32 +5,30 @@ import authenticateToken from '../middleware/authMiddleware';
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// Extend the Request type to include user property
 interface AuthenticatedRequest extends Request {
   user?: {
-    userId: string;
+    name: string;
+    govEmail: string;
   };
 }
 
-// Get User Profile
-// GET /api/profile
 router.get(
   '/',
   authenticateToken,
   async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-    // Check if user is authenticated
-    if (!req.user || !req.user.userId) {
-      res.status(403).json({ error: 'Unauthorized access.' });
+    // Validate user
+    if (!req.user || !req.user.govEmail) {
+      res.status(403).json({ error: 'Unauthorized access. User information missing.' });
       return;
     }
 
-    const userId = req.user.userId;
+    const { govEmail } = req.user;
 
     try {
-      // Fetch user profile from the database
+      // Retrieve user by govEmail
       const user = await prisma.user.findUnique({
         where: {
-          id: userId,
+          govEmail,
         },
       });
 
@@ -49,8 +47,8 @@ router.get(
         },
       });
     } catch (error) {
-      console.error('Error fetching user profile:', error); // Log the error for debugging
-      res.status(500).json({ error: 'An error occurred while fetching the user profile.' });
+      console.error('Error fetching user profile:', error);
+      res.status(500).json({ error: 'Profile retrieval failed.' });
     }
   }
 );
